@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     if (value == 1) {
       document = await PDFDocument.fromURL(
-          "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf");
+          "http://conorlastowka.com/book/CitationNeededBook-Sample.pdf");
     } else {
       document = await PDFDocument.fromAsset('assets/sample.pdf');
     }

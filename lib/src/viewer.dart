@@ -162,6 +162,9 @@ class _PDFViewerState extends State<PDFViewer> {
   }
 
   _pickPage() {
+    setState(() {
+      _pageSelected = _pageNumber;
+    });
     showModalBottomSheet<int>(
       context: context,
       shape: RoundedRectangleBorder(
@@ -178,10 +181,10 @@ class _PDFViewerState extends State<PDFViewer> {
                   NumberPicker(
                       minValue: 1,
                       maxValue: widget.document.count!,
-                      value: _pageNumber,
+                      value: _pageSelected,
                       itemWidth: MediaQuery.of(context).size.width,
                       haptics: true,
-                      onChanged: (value) => setModalState(() => _pageNumber = value)
+                      onChanged: (value) => setModalState(() => _pageSelected = value)
                   ),
                   Align(
                     alignment: AlignmentDirectional.bottomEnd,
@@ -193,7 +196,7 @@ class _PDFViewerState extends State<PDFViewer> {
                         ),
                         child: Text(widget.tooltip.jump),
                         onPressed: () {
-                          Navigator.of(context).pop(_pageNumber);
+                          Navigator.of(context).pop(_pageSelected);
                         },
                       ),
                     ),
