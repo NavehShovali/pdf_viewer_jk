@@ -15,8 +15,8 @@ class PDFViewer extends StatefulWidget {
   final PDFViewerTooltip tooltip;
   final Color backgroundNavigation;
   final Color iconNavigation;
-  final Color? backgorundPickPage;
-  final Color? iconPickPage;
+  final Color? pickerButtonColor;
+  final Color? pickerIconColor;
   final bool enableSwipeNavigation;
   final Axis? scrollDirection;
   final bool lazyLoad;
@@ -34,17 +34,30 @@ class PDFViewer extends StatefulWidget {
     void Function({int? page}) animateToPage,
   )? navigationBuilder;
 
-  PDFViewer({Key? key, required this.document, this.scrollDirection, this.lazyLoad = true, this.indicatorText = Colors.white, this.indicatorBackground = Colors.black54, this.showIndicator = true, this.showPicker = true, this.showNavigation = true, this.enableSwipeNavigation = true, this.tooltip = const PDFViewerTooltip(), this.backgroundNavigation = Colors.white, this.iconNavigation = Colors.black,
-      this.backgorundPickPage,
-      this.iconPickPage,
-      this.navigationBuilder,
-      this.controller,
-      this.indicatorPosition = IndicatorPosition.topRight,
-      this.zoomSteps,
-      this.minScale,
-      this.maxScale,
-      this.panLimit})
-      : super(key: key);
+  PDFViewer({
+    Key? key,
+    required this.document,
+    this.scrollDirection,
+    this.lazyLoad = true,
+    this.indicatorText = Colors.white,
+    this.indicatorBackground = Colors.black54,
+    this.showIndicator = true,
+    this.showPicker = true,
+    this.showNavigation = true,
+    this.enableSwipeNavigation = true,
+    this.tooltip = const PDFViewerTooltip(),
+    this.backgroundNavigation = Colors.white,
+    this.iconNavigation = Colors.black,
+    this.pickerButtonColor,
+    this.pickerIconColor,
+    this.navigationBuilder,
+    this.controller,
+    this.indicatorPosition = IndicatorPosition.topRight,
+    this.zoomSteps,
+    this.minScale,
+    this.maxScale,
+    this.panLimit
+  }) : super(key: key);
 
   _PDFViewerState createState() => _PDFViewerState();
 }
@@ -57,6 +70,7 @@ class _PDFViewerState extends State<PDFViewer> {
   PageController? _pageController;
   final Duration animationDuration = Duration(milliseconds: 200);
   final Curve animationCurve = Curves.easeIn;
+  int _pageSelected = 0;
 
   @override
   void initState() {
@@ -148,13 +162,49 @@ class _PDFViewerState extends State<PDFViewer> {
   }
 
   _pickPage() {
-    showDialog<int>(
-        context: context,
-        builder: (BuildContext context) {
-          return NumberPicker(minValue: 1, maxValue: widget.document.count!, value: _pageNumber, onChanged: (int n) {});
-        }).then((int? value) {
+    showModalBottomSheet<int>(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setModalState) {
+          return Container(
+            height: 250,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  NumberPicker(
+                      minValue: 1,
+                      maxValue: widget.document.count!,
+                      value: _pageNumber,
+                      itemWidth: MediaQuery.of(context).size.width,
+                      haptics: true,
+                      onChanged: (value) => setModalState(() => _pageNumber = value)
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(end: 16, top: 16),
+                      child: TextButton(
+                        child: Text(widget.tooltip.jump),
+                        onPressed: () {
+                          Navigator.of(context).pop(_pageNumber);
+                        },
+                      ),
+                    ),
+                  )
+                ]
+            ),
+          );
+        });
+      }
+    ).then((int? value) {
       if (value != null) {
-        _pageNumber = value;
+        setState(() {
+          _pageNumber = value;
+        });
         _jumpToPage();
       }
     });
@@ -191,10 +241,13 @@ class _PDFViewerState extends State<PDFViewer> {
       ),
       floatingActionButton: widget.showPicker && widget.document.count! > 1
           ? FloatingActionButton(
-              backgroundColor: (widget.backgorundPickPage != null) ? widget.backgorundPickPage : Theme.of(context).primaryColor,
+              backgroundColor: widget.pickerButtonColor ?? Theme.of(context).accentColor,
               elevation: 4.0,
               tooltip: widget.tooltip.jump,
-              child: Icon(Icons.view_carousel, color: (widget.iconPickPage != null) ? widget.iconPickPage : Colors.white),
+              child: Icon(
+                  Icons.view_carousel,
+                  color: widget.pickerIconColor ?? Colors.black
+              ),
               onPressed: () {
                 _pickPage();
               },

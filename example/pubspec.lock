@@ -220,7 +220,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.0.0-nullsafety.2"
+    version: "2.1.1"
   pedantic:
     dependency: transitive
     description:
