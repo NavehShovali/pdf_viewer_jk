@@ -188,9 +188,10 @@ class _PDFViewerState extends State<PDFViewer> {
                     child: Padding(
                       padding: EdgeInsetsDirectional.only(end: 16, top: 16),
                       child: TextButton(
-                        child: Text(widget.tooltip.jump, style: TextStyle(
-                          color: Theme.of(context).accentColor,
-                        )),
+                        style: TextButton.styleFrom(
+                          primary: Theme.of(context).accentColor,
+                        ),
+                        child: Text(widget.tooltip.jump),
                         onPressed: () {
                           Navigator.of(context).pop(_pageNumber);
                         },

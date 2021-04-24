@@ -11,6 +11,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        primaryColor: Colors.yellow,
+        accentColor: Colors.deepPurple
       ),
       home: MyHomePage(),
     );
@@ -45,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
       document = await PDFDocument.fromAsset('assets/sample.pdf');
     }
     setState(() {
-      title = (value == 1) ? "Loaded From Url" : "Loaded From Assets";
+      title = (value == 1) ? "Loaded From Urlfvfd" : "Loaded From Assets";
       _isLoading = false;
     });
   }
@@ -53,6 +55,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        theme: ThemeData(
+            primarySwatch: Colors.green,
+            // accentColor: Colors.deepPurple
+        ),
         home: Scaffold(
             drawer: Drawer(
               child: Column(
