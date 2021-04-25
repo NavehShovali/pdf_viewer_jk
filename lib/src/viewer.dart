@@ -277,7 +277,10 @@ class _PDFViewerState extends State<PDFViewer> {
                       Expanded(
                         child: IconButton(
                           icon: Icon(Icons.first_page,
-                              color: widget.iconNavigation),
+                              color: widget.iconNavigation.withOpacity(
+                                _pageNumber == 1 ? .3 : .75,
+                              )
+                          ),
                           tooltip: widget.tooltip.first,
                           onPressed: _pageNumber == 1
                               ? null
@@ -290,7 +293,10 @@ class _PDFViewerState extends State<PDFViewer> {
                       Expanded(
                         child: IconButton(
                           icon: Icon(Icons.chevron_left,
-                              color: widget.iconNavigation),
+                              color: widget.iconNavigation.withOpacity(
+                                _pageNumber == 1 ? .5 : 1.0,
+                              )
+                          ),
                           tooltip: widget.tooltip.previous,
                           onPressed: _pageNumber == 1
                               ? null
@@ -309,7 +315,10 @@ class _PDFViewerState extends State<PDFViewer> {
                       Expanded(
                         child: IconButton(
                           icon: Icon(Icons.chevron_right,
-                              color: widget.iconNavigation),
+                              color: widget.iconNavigation.withOpacity(
+                                _pageNumber == widget.document.count ? .5 : 1.0,
+                              )
+                          ),
                           tooltip: widget.tooltip.next,
                           onPressed: _pageNumber == widget.document.count
                               ? null
@@ -325,7 +334,10 @@ class _PDFViewerState extends State<PDFViewer> {
                       Expanded(
                         child: IconButton(
                           icon: Icon(Icons.last_page,
-                              color: widget.iconNavigation),
+                              color: widget.iconNavigation.withOpacity(
+                                _pageNumber == widget.document.count ? .3 : .75,
+                              )
+                          ),
                           tooltip: widget.tooltip.last,
                           onPressed: _pageNumber == widget.document.count
                               ? null
